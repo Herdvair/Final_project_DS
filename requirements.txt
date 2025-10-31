@@ -4,36 +4,10 @@ numpy
 matplotlib
 seaborn
 plotly
+dalex
 scikit-learn
+imbalanced-learn
 xgboost
 lightgbm
-imbalanced-learn
+statsmodels
 scipy
-dalex
-pandas
-numpy
-plotly.express
-plotly.graph_objects
-make_subplots
-train_test_split
-RandomizedSearchCV 
-StratifiedKFold
-MinMaxScaler
-ColumnTransformer
-Pipeline
-classification_report, confusion_matrix, accuracy_score,precision_score, recall_score, f1_score, roc_auc_score,roc_curve, precision_recall_curve
-LogisticRegression
-RandomForestClassifier
-DecisionTreeClassifier
-SVC
-KNeighborsClassifier
-XGBClassifier
-LGBMClassifier
-MLPClassifier
-SMOTEENN
-variance_inflation_factor
-add_constant
-stats
-chi2_contingency, ttest_ind 
-import osstreamlit>=1.28.0
-requests>=2.31.0
