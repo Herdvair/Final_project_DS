@@ -88,7 +88,7 @@ st.sidebar.title("⚙️ Eksplore Data")
 st.sidebar.markdown("---")
 
 # Ganti dengan URL RAW GitHub yang BENAR
-DEFAULT_FILE_PATH = "https://raw.githubusercontent.com/Herdvair/Final_Project_Streamlit/main/alzheimers_disease_data.csv"
+DEFAULT_FILE_PATH = "https://github.com/Herdvair/Final_project_DS/blob/main/alzheimers_disease_data.csv"
 
 # Load Data Function
 @st.cache_data
