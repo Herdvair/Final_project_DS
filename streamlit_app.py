@@ -572,11 +572,11 @@ elif selected_tab == "Preprocessing & VIF":
                         
                         def color_vif(val):
                             if val < 3:
-                                color = 'background-color: #174143'
+                                color = 'background-color: #FFFFFF'
                             elif val < 10:
-                                color = 'background-color: #427A76'
+                                color = 'background-color: #0000FF'
                             else:
-                                color = 'background-color: #F9B487'
+                                color = 'background-color: #FF0000'
                             return color
                         
                         st.dataframe(
