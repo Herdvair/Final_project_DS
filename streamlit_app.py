@@ -35,7 +35,7 @@ from imblearn.pipeline import Pipeline as ImbPipeline
 from statsmodels.stats.outliers_influence import variance_inflation_factor as vif
 from statsmodels.tools.tools import add_constant
 from scipy import stats
-from scipy.stats import chi2_contingency, ttest_ind as stats_ttest_ind # Mengganti ttest_ind dengan alias yang jelas
+from scipy.stats import chi2_contingency, ttest_ind as stats_ttest_ind 
 import warnings
 warnings.filterwarnings('ignore')
 import os
@@ -97,36 +97,23 @@ def load_data(uploaded=None, default_path=None):
     Load dataset: Prioritizes uploaded file, then default URL file.
     """
     try:
-        # 1. Prioritas: File yang Diunggah di Dashboard
+        #  File yang Diunggah di Dashboard
         if uploaded is not None:
             return pd.read_csv(uploaded)
 
-        # 2. Prioritas: File Default (URL RAW)
+        #  File Default (URL RAW)
         elif default_path is not None:
             # pd.read_csv bisa membaca URL secara langsung
             return pd.read_csv(default_path)
         
-        # 3. Pilihan Terakhir: Tidak ada data
+        #  Tidak ada data
         else:
             return None
             
     except Exception as e:
         st.error(f"Error loading data: {str(e)}")
         return None
-
-# --- Logika Streamlit Utama ---
-
-# Upload file option
-# uploaded_file = st.sidebar.file_uploader(
-#     "📁 Upload Dataset (CSV)",
-#     type=['csv'],
-#     help=f"Upload file to replace the default dataset ({DEFAULT_FILE_PATH})."
-# )
-
-## -------------------------------------------------------------------
-# 1. DEFINISI FUNGSI (HARUS DI ATAS SEBELUM DIPANGGIL!)
-# -------------------------------------------------------------------
-
+        
 def data_understanding(df_eda: pd.DataFrame):
     """Display comprehensive data understanding for EDA."""
     
@@ -166,17 +153,7 @@ for key, value in default_state.items():
 # 3. LOAD DATA
 # -------------------------------------------------------------------
 
-# Asumsi Anda punya fungsi load_data atau upload file
 df = load_data(uploaded=DEFAULT_FILE_PATH)
-# Atau
-# uploaded_file = st.file_uploader("Upload CSV", type=['csv'])
-# if uploaded_file:
-#     df = pd.read_csv(uploaded_file)
-# else:
-#     df = None
-
-# Untuk contoh, kita buat dummy:
-# df = pd.read_csv('your_file.csv')  # Ganti dengan cara load Anda
 
 # Simpan ke session state
 if df is not None:
@@ -202,8 +179,6 @@ selected_tab = st.sidebar.radio(
     index=0 # Set EDA sebagai tab default
 )
 
-
-# --- 2. HILANGKAN STYLING CSS UNTUK TABS UTAMA (Diganti dengan Sidebar) ---
 st.markdown("""
 <style>
 /* HILANGKAN styling stTabs utama, tetapi pertahankan styling sub-tabs dan multiselect */
@@ -225,11 +200,7 @@ st.markdown("""
 
 # --- 3. IMPLEMENTASI KONTEN BERDASARKAN SIDEBAR ---
 
-# Asumsi: df dan st.session_state sudah diinisialisasi di tempat lain.
-
-# ==============================================================================
-# ==============================================================================
-## 🎯 TAB 1: EXPLORATORY DATA ANALYSIS (PERBAIKAN)
+## 🎯 TAB 1: EXPLORATORY DATA ANALYSIS (PERBAIKAN
 # ==============================================================================
 if selected_tab == "Eksplorasi Analisis Data":
     
@@ -511,9 +482,9 @@ if selected_tab == "Eksplorasi Analisis Data":
                 st.info("Uji Statistik T-Test tidak dapat dilakukan karena hanya satu kelas Diagnosis (Non-AD atau Alzheimer) yang dipilih.")
 
 
-# ==============================================================================
-# 🎯 TAB 2: PREPROCESSING & VIF (PERBAIKAN)
-# ==============================================================================
+# =================================================================
+# 🎯 TAB 2: PREPROCESSING & VIF 
+# =================================================================
 elif selected_tab == "Preprocessing & VIF":
     
     st.header(selected_tab)
@@ -637,9 +608,9 @@ elif selected_tab == "Preprocessing & VIF":
             st.warning("⚠️ Mohon split data terlebih dahulu!")
 
 
-# ==============================================================================
-# 🎯 TAB 3: MODEL DASAR (SUDAH BENAR - TIDAK PERLU DIUBAH)
-# ==============================================================================
+# ===========================================================================
+# 🎯 TAB 3: MODEL DASAR 
+# ===========================================================================
 elif selected_tab == "Model Dasar":
     st.header(selected_tab)
     
@@ -783,7 +754,7 @@ elif selected_tab == "LightGBM":
         tuning_method = st.tabs(["Tanpa SMOTEENN", "Dengan SMOTEENN"])
         
         # ===================================================================
-        # METODE 1: TANPA SMOTEENN (SAMA SEPERTI COLAB)
+        # METODE 1: TANPA SMOTEENN 
         # ===================================================================
         with tuning_method[0]:
             
@@ -799,12 +770,12 @@ elif selected_tab == "LightGBM":
                 with st.spinner("Sedang memuat model..."):
                     from sklearn.pipeline import Pipeline
                     
-                    # Pipeline PERSIS seperti di Colab
+                    
                     pipe_tuned = Pipeline([
                         ('tuned_model', LGBMClassifier(random_state=random_state, is_unbalance=True))
                     ])
                     
-                    # Parameter grid PERSIS seperti di Colab
+                   
                     param_grid = {
                         'tuned_model__max_depth': [3, 5, 7, 10],
                         'tuned_model__learning_rate': [0.01, 0.05, 0.1, 0.2],
@@ -818,10 +789,10 @@ elif selected_tab == "LightGBM":
                         'tuned_model__boosting_type': ['gbdt', 'dart']
                     }
                     
-                    # Cross-validation PERSIS seperti di Colab
+                  
                     cv = StratifiedKFold(n_splits=cv_splits, shuffle=True, random_state=random_state)
                     
-                    # Random Search PERSIS seperti di Colab
+          
                     random_search_lgbm = RandomizedSearchCV(
                         estimator=pipe_tuned,
                         param_distributions=param_grid,
@@ -836,7 +807,7 @@ elif selected_tab == "LightGBM":
                     # Fit model
                     random_search_lgbm.fit(st.session_state.X_train, st.session_state.y_train)
                     
-                    # Ambil model terbaik PERSIS seperti di Colab
+                  
                     tuned_lgbm = random_search_lgbm.best_estimator_
                     
                     # Store
@@ -920,9 +891,9 @@ elif selected_tab == "LightGBM":
                 )
                 st.plotly_chart(fig, use_container_width=True)
         
-        # ===================================================================
-        # METODE 2: DENGAN SMOTEENN (PERSIS SEPERTI COLAB)
-        # ===================================================================
+        # ================================================================
+        # METODE 2: DENGAN SMOTEENN 
+        # ================================================================
         with tuning_method[1]:
             col1, col2 = st.columns(2)
             with col1:
@@ -934,11 +905,11 @@ elif selected_tab == "LightGBM":
             
             if st.button("Mulai tuning", key='lgbm_tune2'):
                 with st.spinner("Memuat model..."):
-                    # PENTING: Import dari imblearn.pipeline
+                  
                     from imblearn.pipeline import Pipeline
                     from imblearn.combine import SMOTEENN
                     
-                    # Pipeline PERSIS seperti di Colab
+            
                     pipe_imb = Pipeline([
                         ('scaler', ColumnTransformer([
                             ('scale', MinMaxScaler(), cols_to_scale)
@@ -947,7 +918,7 @@ elif selected_tab == "LightGBM":
                         ('model', LGBMClassifier(random_state=random_state_smote))
                     ])
                     
-                    # Parameter grid PERSIS seperti di Colab
+                  
                     param_grid = {
                         'model__max_depth': [3, 5, 7, 10],
                         'model__learning_rate': [0.01, 0.05, 0.1, 0.2],
@@ -959,10 +930,10 @@ elif selected_tab == "LightGBM":
                         'model__num_leaves': [15, 31, 63]
                     }
                     
-                    # Cross-validation PERSIS seperti di Colab
+                  
                     cv = StratifiedKFold(n_splits=cv_splits_smote, shuffle=True, random_state=random_state_smote)
                     
-                    # Random Search PERSIS seperti di Colab
+               
                     random_search = RandomizedSearchCV(
                         estimator=pipe_imb,
                         param_distributions=param_grid,
@@ -975,8 +946,7 @@ elif selected_tab == "LightGBM":
                     
                     # Fit model
                     random_search.fit(st.session_state.X_train, st.session_state.y_train)
-                    
-                    # Retrieve model PERSIS seperti di Colab
+            
                     tuned_model_lgbm_imb = random_search.best_estimator_
                     
                     # Store
@@ -984,13 +954,13 @@ elif selected_tab == "LightGBM":
                     st.session_state.lgbm_smote_best_params = random_search.best_params_
                     st.session_state.lgbm_smote_best_score = random_search.best_score_
                     
-                    # Predict PERSIS seperti di Colab
+                    # Predict 
                     pred_lgbm_imb_train = tuned_model_lgbm_imb.predict(st.session_state.X_train)
                     pred_lgbm_imb_train_probs = tuned_model_lgbm_imb.predict_proba(st.session_state.X_train)[:, 1]
                     pred_lgbm_imb_test = tuned_model_lgbm_imb.predict(st.session_state.X_test)
                     pred_lgbm_imb_test_probs = tuned_model_lgbm_imb.predict_proba(st.session_state.X_test)[:, 1]
                     
-                    # Evaluate PERSIS seperti di Colab
+                    # Evaluate 
                     lgbm_imb_train_metrics = {
                         'Precision': precision_score(st.session_state.y_train, pred_lgbm_imb_train),
                         'Recall': recall_score(st.session_state.y_train, pred_lgbm_imb_train),
@@ -1005,7 +975,7 @@ elif selected_tab == "LightGBM":
                         'ROC AUC': roc_auc_score(st.session_state.y_test, pred_lgbm_imb_test_probs)
                     }
                     
-                    # DataFrame hasil evaluasi PERSIS seperti di Colab
+                    # DataFrame evaluasi
                     tuned_lgbm_evaluation_df = pd.DataFrame(
                         [lgbm_imb_train_metrics, lgbm_imb_test_metrics], 
                         index=['Train', 'Test']
@@ -1226,21 +1196,6 @@ elif selected_tab == "Evaluasi Model":
             )
             st.plotly_chart(fig_compare, use_container_width=True)
             
-            # Highlight best model
-            best_f1_idx = comparison_df['F1-Score'].idxmax()
-            best_f1_score = comparison_df.loc[best_f1_idx, 'F1-Score']
-            best_recall_idx = comparison_df['Recall'].idxmax()
-            best_recall_score = comparison_df.loc[best_recall_idx, 'Recall']
-            
-            st.success(f"""
-            ### 🏆 Model Terbaik
-            **{best_f1_idx}**
-            - F1-Score: {best_f1_score:.4f}
-            - Precision: {comparison_df.loc[best_f1_idx, 'Precision']:.4f}
-            - Recall: {best_recall_score:.4f}
-            - ROC AUC: {comparison_df.loc[best_f1_idx, 'ROC AUC']:.4f}
-            """)
-
 
 
 elif selected_tab == "Fitur Penting":
